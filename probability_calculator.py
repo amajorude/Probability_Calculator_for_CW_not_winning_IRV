@@ -20,18 +20,6 @@ def mvncdf_lower_upper(lower, upper, mean, cov):
 
 def main():
     m = 4  # number of candidates
-    m_fact = factorial(m)
-
-    def sum_expr_closed(l, m):
-        part1 = sum(
-            comb(l - 1, s) * factorial(s + 1) * factorial(m - 2 - s)
-            for s in range(l)
-        )
-        part2 = 0.5 * sum(
-            comb(l - 1, s) * factorial(s) * factorial(m - 1 - s)
-            for s in range(l)
-        )
-        return part1 + part2
 
     def falling(x, n):
         """Falling factorial: x * (x-1) * ... * (x-n+1)"""
@@ -107,7 +95,7 @@ def main():
                             Sigma[i_idx, col_idx] = -c_l(l, m) / 2
                         else:  # t < l + 1
                             Sigma[i_idx, col_idx] = (
-                                -sum_expr_closed(l, m) / m_fact + c_l(k - 2, m) / 2
+                                -c_l(k - 2, m)/2
                             )
 
                     # NOT LAST ROUND
@@ -121,7 +109,7 @@ def main():
                                 Sigma[i_idx, col_idx] = c_l(l, m) / 2
                             else:  # t < l + 1
                                 Sigma[i_idx, col_idx] = (
-                                    sum_expr_closed(l, m) / m_fact - c_l(l - 1, m)
+                                    c_l(l - 1, m)/2
                                 )
                         elif a == t:
                             Sigma[i_idx, col_idx] = -c_l(l, m) / 2
