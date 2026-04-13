@@ -13,13 +13,13 @@ def mvncdf_lower_upper(lower, upper, mean, cov):
     """
     # P(lower < X < upper) = CDF(upper) - ... handled via lower_limit parameter
     prob = multivariate_normal.cdf(
-        upper, mean=mean, cov=cov, lower_limit=lower, allow_singular=True
+        upper, mean=mean, cov=cov, lower_limit=lower, allow_singular=False
     )
     return float(prob)
 
 
 def main():
-    m = 4  # number of candidates
+    m = 10  # number of candidates
 
     def falling(x, n):
         """Falling factorial: x * (x-1) * ... * (x-n+1)"""
