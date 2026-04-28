@@ -3,7 +3,7 @@ import numpy as np
 
 # Parameters
 n_voters = 10000   # voters per profile
-m = 16           # number of candidates
+m = 4           # number of candidates
 num_profiles = 5000
 
 # Generator (Impartial Culture)
@@ -28,10 +28,20 @@ for i in range(num_profiles):
             count_cw_not_irv += 1
 
     # Optional progress display
-    if (i+1) % 100 == 0:
+    if (i+1) % 1000 == 0:
         print(f"{i+1} profiles processed...")
 
 # Results
+
+p_hat = count_cw_not_irv / num_profiles
+
+# Standard error
+se = np.sqrt(p_hat * (1 - p_hat) / num_profiles)
+
+# 95% confidence interval
+ci_lower = p_hat - 1.96 * se
+ci_upper = p_hat + 1.96 * se
+
 print("\n===== RESULTS =====")
 print("Total profiles:", num_profiles)
 print("Profiles with CW:", count_cw_exists)
@@ -41,5 +51,5 @@ if count_cw_exists > 0:
     print("Conditional probability P(IRV fails | CW exists):",
           count_cw_not_irv / count_cw_exists)
 
-print("Unconditional probability:",
-      count_cw_not_irv / num_profiles)
+print(f"Unconditional probability: {p_hat:.3f}")
+print(f"95% CI: [{ci_lower:.3f}, {ci_upper:.3f}]")

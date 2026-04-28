@@ -13,7 +13,10 @@ def falling_factorial(x: int, n: int) -> int:
 
 
 def c(ell: int, m: int) -> float:
-    """Scaling factor for round ell."""
+    """
+    Percentage of rankings where a candidate is ranked above
+    every other candidate in a set of size m - ell. 
+    """
     return 1.0 / (m - ell)
 
 
@@ -66,23 +69,19 @@ def d_size(k: int, m: int) -> int:
 def cov_elim_elim(ell1: int, s1: int, ell2: int, s2: int, k: int, m: int) -> float:
     """
     Cov(Y_{ell1, s1}, Y_{ell2, s2}) for two elimination rows.
-
-    Each elimination row (ell, s) computes:
-        n_{S_{ell+1}}(ell + s + 1)  -  n_{S_{ell+1}}(ell + 1)
-
-    where n_{S}(c) = number of voters whose top candidate in S is c,
-    scaled so that Var(n_S(c)) = c(ell, m) * (1 - c(ell, m)).
-
-    Covariances arise because the two rows may share candidate sets.
     """
    # a_i is the candidate to keep in row (ell_i, s_i)
    # b_i is the candidate to eliminate in row (ell_i, s_i)
+
+   # Define a_i and b_i depending on whether the round is the last one
+
     if ell1 < k - 1:
         a1 = ell1 + s1 + 1
         b1 = ell1 + 1
     else:
         a1 = k - 1 + s1
         b1 = m
+
     if ell2 < k - 1:
         a2 = ell2 + s2 + 1
         b2 = ell2 + 1
@@ -118,8 +117,8 @@ def cov_elim_cw(ell: int, s: int, t: int, k: int, m: int) -> float:
     preferring t over m)).
 
     The sign structure follows from:
-      - Y_{ell,s} has +1 on ballots ranking a = ell+s+1 first in S_{ell+1}
-                      -1 on ballots ranking b = ell+1   first in S_{ell+1}
+      - Y_{ell,s} has +1 on ballots ranking a first in S_{ell+1}
+                      -1 on ballots ranking b first in S_{ell+1}
       - Z_t        has -1 on ballots ranking t above m
     """
     is_last = (ell == k - 1)
@@ -156,9 +155,6 @@ def cov_cw_cw(s: int, t: int) -> float:
     """
     Cov(Z_s, Z_t) for two CW rows.
     Z_s = -(votes preferring s over m),  Z_t = -(votes preferring t over m).
-
-    Under IC, each voter's preference between s,m and t,m are independent
-    Bernoulli(1/2), giving Var = 1/4 and Cov = 1/12 for distinct pairs.
     """
     return 1 / 4 if s == t else 1 / 12
 
@@ -216,9 +212,9 @@ def print_covariance_matrix(Sigma: np.ndarray, k: int, m: int) -> None:
         for s in range(1, m - ell):
             a = ell + s + 1
             b = ell + 1
-            labels.append(f"E(r={ell+1},+{a},-{b})")
+            labels.append(f"E(r={ell+1},a={a},b={b})")
     for t in range(1, m):
-        labels.append(f"CW(vs {t})")
+        labels.append(f"CW({m} vs {t})")
 
     col_width = max(len(l) for l in labels) + 2
     header = " " * col_width + "".join(f"{l:>{col_width}}" for l in labels)
@@ -238,16 +234,15 @@ def print_covariance_matrix(Sigma: np.ndarray, k: int, m: int) -> None:
 # Main
 # ---------------------------------------------------------------------------
 
-def compute_irv_cw_probability(m: int, verbose: bool = True,
-                               print_cov: bool = True) -> float:
+def compute_irv_cw_probability(m: int, print_cov: bool = True) -> float:
     """
-    Compute P(candidate m wins IRV and is a Condorcet Winner)
+    Compute P(candidate m is a Condorcet Winner not picked by IRV)
     under the Impartial Culture assumption with m candidates.
     """
-    if verbose:
-        print(f"\n{'='*50}")
-        print(f"  m = {m} candidates")
-        print(f"{'='*50}")
+
+    print(f"\n{'='*50}")
+    print(f"  m = {m} candidates")
+    print(f"{'='*50}")
 
     total = 0.0
 
@@ -256,7 +251,7 @@ def compute_irv_cw_probability(m: int, verbose: bool = True,
 
         # Sanity checks
         eigvals = np.linalg.eigvalsh(Sigma)
-        if np.any(eigvals < -1e-8):
+        if np.any(eigvals < 1e-8):
             print(f"  [WARNING] k={k}: Sigma is not PSD "
                   f"(min eigval={eigvals.min():.2e})")
 
@@ -270,19 +265,18 @@ def compute_irv_cw_probability(m: int, verbose: bool = True,
         weight = falling_factorial(m - 1, k - 1)
         contribution = weight * prob
 
-        if verbose:
-            print(f"  k={k:2d} | d={d_size(k,m):4d} | P(A*_k)={prob:.6f} "
-                  f"| weight={weight} | contribution={contribution:.6f}")
+        print(f"  k={k:2d} | d={d_size(k,m):4d} | P(A*_k)={prob:.6f} "
+                f"| weight={weight} | contribution={contribution:.6f}")
 
         total += contribution
 
     result = m * total
-    if verbose:
-        print(f"\n  Total probability = {result:.3f}")
+        
+    print(f"\n  Total probability = {result:.3f}")
 
     return result
 
 
 if __name__ == "__main__":
-    for m in [4]:
-        compute_irv_cw_probability(m, verbose=True, print_cov=False)
+    for m in [3,4,5]:
+        compute_irv_cw_probability(m, print_cov=False)
