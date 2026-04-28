@@ -236,8 +236,9 @@ def print_covariance_matrix(Sigma: np.ndarray, k: int, m: int) -> None:
 
 def compute_irv_cw_probability(m: int, print_cov: bool = True) -> float:
     """
-    Compute P(candidate m is a Condorcet Winner not picked by IRV)
-    under the Impartial Culture assumption with m candidates.
+    Compute P(there exists a candidate that is a Condorcet Winner not elected by IRV)
+    under the Impartial Culture assumption with m > 2 candidates and n tending
+    to infinity electors.
     """
 
     print(f"\n{'='*50}")
