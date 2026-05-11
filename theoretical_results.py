@@ -164,7 +164,7 @@ def cov_cw_cw(s: int, t: int) -> float:
 # ---------------------------------------------------------------------------
 
 def build_covariance(k: int, m: int) -> np.ndarray:
-    """Build the full covariance matrix Sigma = A Sigma_z A^T."""
+    """Build the full covariance matrix."""
     d  = d_size(k, m)
     d1 = d1_size(k, m)
     Sigma = np.zeros((d, d))
