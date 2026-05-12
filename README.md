@@ -1,6 +1,6 @@
 # Probability Calculator: Condorcet Winner Not Winning IRV
 
-This repository computes the probability that the **Condorcet Winner (CW) is not elected by Instant-Runoff Voting (IRV)**, under the **Impartial Culture (IC)** assumption. It provides both a theoretical calculator (exact asymptotic probability as the number of voters tends to infinity) and an empirical simulator (Monte Carlo estimation for finite electorates).
+This repository computes the probability that there exists a **Condorcet Winner (CW) that is not elected by Instant-Runoff Voting (IRV)**, under the **Impartial Culture (IC)** assumption. It provides both a theoretical calculator (exact asymptotic probability as the number of voters tends to infinity) and an empirical simulator (Monte Carlo estimation for finite electorates).
 
 ---
 
