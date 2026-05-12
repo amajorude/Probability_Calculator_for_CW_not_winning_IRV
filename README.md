@@ -118,7 +118,7 @@ pip install -r requirements.txt
 
 ## Interpreting the Results
 
-The theoretical values represent the limiting probability as $n \to \infty$. The empirical values converge toward the theoretical ones as both $n$ and `num_profiles` grow. 
+The theoretical values represent the limiting probability as $n \to \infty$. The empirical values converge toward the theoretical ones as both $n$ and the `num_profiles` T grow. 
 
 | m  | Theoretical (asymptotic) | Empirical (n=10,000, T=10,000) |
 |----|--------------------------|--------------------------------|
