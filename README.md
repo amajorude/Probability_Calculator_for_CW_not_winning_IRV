@@ -58,6 +58,35 @@ Sample output:
 
 ---
 
+## Condorcet Winner Existence Theoretical Calculator (`CW_theoretical_results.py`)
+
+Computes the **asymptotic probability** $P(\text{There exists a CW})$ under IC as the number of voters $n \to \infty$, for a given number of candidates $m$.
+
+
+### Usage
+
+```python
+from CW_theoretical_results import condorcet_winner_probability
+
+# Compute for m = 3 candidates
+p = condorcet_winner_probability(m=3)
+```
+
+Running the script directly computes results for $m = 3$ to $m=20$:
+
+```bash
+python theoretical_results.py
+```
+
+Sample output:
+```
+m = 3
+P(specific candidate is CW) = 0.304087
+P(any CW exists)            = 0.912260
+```
+
+---
+
 ## Empirical Simulator (`empirical_results.py`)
 
 Estimates the probability via **Monte Carlo simulation** using the `svvamp` library to generate random preference profiles and compute IRV and Condorcet winners.
