@@ -279,5 +279,5 @@ def compute_irv_cw_probability(m: int, print_cov: bool = True) -> float:
 
 
 if __name__ == "__main__":
-    for m in [3,4,5]:
-        compute_irv_cw_probability(m, print_cov=False)
+    for m in [3]:
+        compute_irv_cw_probability(m, print_cov=True)
