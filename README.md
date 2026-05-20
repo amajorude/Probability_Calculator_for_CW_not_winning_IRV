@@ -75,7 +75,7 @@ p = condorcet_winner_probability(m=3)
 Running the script directly computes results for $m = 3$ to $m=20$:
 
 ```bash
-python theoretical_results.py
+python CW_theoretical_results.py
 ```
 
 Sample output:
